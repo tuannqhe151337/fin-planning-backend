@@ -4,6 +4,7 @@ import com.example.capstone_project.entity.FinancialPlan;
 import com.example.capstone_project.repository.result.PlanVersionResult;
 import io.lettuce.core.dynamic.annotation.Param;
 import com.example.capstone_project.repository.result.PlanDetailResult;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -54,4 +55,5 @@ public interface FinancialPlanRepository extends JpaRepository<FinancialPlan, Lo
             " WHERE file.plan.id = :planId" +
             " GROUP BY file.plan.id ")
     int getPlanVersionByPlanId(@Param("planId") Long planId);
+
 }
