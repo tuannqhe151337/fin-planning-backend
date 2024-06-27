@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,8 @@ public class SeedConfiguration {
             ExpenseStatusRepository expenseStatusRepository,
             FinancialPlanFileRepository financialPlanFileRepository,
             FinancialPlanFileExpenseRepository financialPlanFileExpenseRepository,
-            FinancialPlanExpenseRepository financialPlanExpenseRepository
+            FinancialPlanExpenseRepository financialPlanExpenseRepository,
+            FinancialReportRepository financialReportRepository
     ) {
         return args -> {
             if (System.getenv("SPRING_PROFILES_ACTIVE") != null && System.getenv("SPRING_PROFILES_ACTIVE").equals("prod")) {
@@ -202,6 +204,11 @@ public class SeedConfiguration {
                     .name("Download report")
                     .build();
 
+            Authority deleteReport = Authority.builder()
+                    .code(AuthorityCode.DELETE_REPORT)
+                    .name("Delete report")
+                    .build();
+
             Authority viewAnnualReport = Authority.builder()
                     .code(AuthorityCode.VIEW_ANNUAL_REPORT)
                     .name("View annual report")
@@ -212,7 +219,7 @@ public class SeedConfiguration {
                     .name("Download annual report")
                     .build();
 
-            authorityRepository.saveAll(List.of(viewUserDetail, viewPlan, createUser, viewListUsers, deleteUser, editUser, activateUser, deactivateUser, createTerm, editTerm, viewTerm, startTerm, deleteTerm, importPlan, reUploadPlan, submitPlanForReview, deletePlan, downloadPlan, approvePlan, viewReport, downloadReport, viewAnnualReport, downloadAnnualReport));
+            authorityRepository.saveAll(List.of(viewUserDetail, viewPlan, createUser, viewListUsers, deleteUser, editUser, activateUser, deactivateUser, createTerm, editTerm, viewTerm, startTerm, deleteTerm, importPlan, reUploadPlan, submitPlanForReview, deletePlan, downloadPlan, approvePlan, viewReport, downloadReport, deleteReport, viewAnnualReport, downloadAnnualReport));
 
             // Role
             Role admin = Role.builder()
@@ -260,7 +267,7 @@ public class SeedConfiguration {
                     .dob(LocalDateTime.of(2000, 4, 2, 2, 3))
                     .email("Emoaihl23@gmail.com")
                     .address("Ha Noi ")
-                    .dob(LocalDateTime.of(2002,11,11, 0,0,0))
+                    .dob(LocalDateTime.of(2002, 11, 11, 0, 0, 0))
                     .build();
 
             User user3 = User.builder()
@@ -449,6 +456,11 @@ public class SeedConfiguration {
                     .authority(downloadReport)
                     .build();
 
+            RoleAuthority accountantAuthority17 = RoleAuthority.builder()
+                    .role(accountant)
+                    .authority(deleteReport)
+                    .build();
+
             RoleAuthority accountantAuthority14 = RoleAuthority.builder()
                     .role(accountant)
                     .authority(viewAnnualReport)
@@ -539,9 +551,14 @@ public class SeedConfiguration {
                     .authority(viewPlan)
                     .build();
 
+            RoleAuthority financialStaffAuthority16 = RoleAuthority.builder()
+                    .role(financialStaff)
+                    .authority(deleteReport)
+                    .build();
+
             roleAuthorityRepository.saveAll(List.of(adminAuthority1, adminAuthority2, adminAuthority3, adminAuthority4, adminAuthority5, adminAuthority6, adminAuthority7,
-                    accountantAuthority1, accountantAuthority2, accountantAuthority3, accountantAuthority4, accountantAuthority5, accountantAuthority6, accountantAuthority7, accountantAuthority8, accountantAuthority9, accountantAuthority10, accountantAuthority11, accountantAuthority12, accountantAuthority13, accountantAuthority14, accountantAuthority15, accountantAuthority16,
-                    financialStaffAuthority1, financialStaffAuthority2, financialStaffAuthority3, financialStaffAuthority4, financialStaffAuthority5, financialStaffAuthority6, financialStaffAuthority7, financialStaffAuthority8, financialStaffAuthority9, financialStaffAuthority10, financialStaffAuthority11, financialStaffAuthority12, financialStaffAuthority13, financialStaffAuthority14, financialStaffAuthority15
+                    accountantAuthority1, accountantAuthority2, accountantAuthority3, accountantAuthority4, accountantAuthority5, accountantAuthority6, accountantAuthority7, accountantAuthority8, accountantAuthority9, accountantAuthority10, accountantAuthority11, accountantAuthority12, accountantAuthority13, accountantAuthority14, accountantAuthority15, accountantAuthority16, accountantAuthority17,
+                    financialStaffAuthority1, financialStaffAuthority2, financialStaffAuthority3, financialStaffAuthority4, financialStaffAuthority5, financialStaffAuthority6, financialStaffAuthority7, financialStaffAuthority8, financialStaffAuthority9, financialStaffAuthority10, financialStaffAuthority11, financialStaffAuthority12, financialStaffAuthority13, financialStaffAuthority14, financialStaffAuthority15, financialStaffAuthority16
             ));
 
             // Plan status
@@ -663,7 +680,7 @@ public class SeedConfiguration {
                     .status(planStatus1)
                     .build();
 
-            planRepository.saveAll(List.of(financialPlan1,financialPlan2,financialPlan3,financialPlan4,financialPlan5));
+            planRepository.saveAll(List.of(financialPlan1, financialPlan2, financialPlan3, financialPlan4, financialPlan5));
 
             CostType costType1 = CostType.builder()
                     .name("Administration cost")
@@ -888,6 +905,62 @@ public class SeedConfiguration {
                     .build();
 
             financialPlanFileExpenseRepository.saveAll(List.of(fileExpense1, fileExpense2, fileExpense3, fileExpense4, fileExpense5, fileExpense6, fileExpense7, fileExpense8, fileExpense9, fileExpense10, fileExpense11, fileExpense12, fileExpense13, fileExpense14, fileExpense15));
+
+            FinancialReport report1 = FinancialReport.builder()
+                    .name("Report Name 1")
+                    .month(LocalDate.now())
+                    .version("v3")
+                    .status(planStatus1)
+                    .department(accountingDepartment)
+                    .term(term1)
+                    .build();
+
+            FinancialReport report2 = FinancialReport.builder()
+                    .name("Report Name 2")
+                    .month(LocalDate.now())
+                    .version("v2")
+                    .status(planStatus2)
+                    .department(accountingDepartment)
+                    .term(term2)
+                    .build();
+
+            FinancialReport report3 = FinancialReport.builder()
+                    .name("Report Name 3")
+                    .month(LocalDate.now())
+                    .version("v3")
+                    .status(planStatus1)
+                    .department(softwareDevelopmentDepartment)
+                    .term(term1)
+                    .build();
+
+            FinancialReport report4 = FinancialReport.builder()
+                    .name("Report Name 4")
+                    .month(LocalDate.now())
+                    .version("v3")
+                    .status(planStatus4)
+                    .department(accountingDepartment)
+                    .term(term1)
+                    .build();
+
+            FinancialReport report5 = FinancialReport.builder()
+                    .name("Report Name 5")
+                    .month(LocalDate.now())
+                    .version("v1")
+                    .status(planStatus2)
+                    .department(accountingDepartment)
+                    .term(term3)
+                    .build();
+
+            FinancialReport report6 = FinancialReport.builder()
+                    .name("Report Name 6")
+                    .month(LocalDate.now())
+                    .version("v3")
+                    .status(planStatus2)
+                    .department(softwareDevelopmentDepartment)
+                    .term(term2)
+                    .build();
+
+            financialReportRepository.saveAll(List.of(report1, report2, report3, report4, report5, report6));
         };
     }
 }
