@@ -24,6 +24,8 @@ public interface UserService {
     void updateUser(User user) throws Exception;
 
     void activateUser(ActivateUserBody activateUserBody);
+
     void deactivateUser(DeactiveUserBody deactiveUserBody);
+
     void changePassword(ChangePasswordBody changePasswordBody);
 }

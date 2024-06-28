@@ -16,4 +16,6 @@ public interface TermService {
     void createTerm(Term term) throws Exception;
 
     Term findTermById(Long id) throws Exception;
+
+    void deleteTerm(Long id) throws Exception;
 }
