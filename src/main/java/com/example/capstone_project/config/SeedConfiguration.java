@@ -69,14 +69,17 @@ public class SeedConfiguration {
             // Department
             Department softwareDevelopmentDepartment = Department.builder()
                     .name("Software development")
+                    .code(DepartmentCode.IT)
                     .build();
 
             Department accountingDepartment = Department.builder()
                     .name("Accounting department")
+                    .code(DepartmentCode.ACCOUNTING)
                     .build();
 
             Department financeDepartment = Department.builder()
                     .name("Finance department")
+                    .code(DepartmentCode.FINANCE)
                     .build();
 
             departmentRepository.saveAll(List.of(softwareDevelopmentDepartment, accountingDepartment, financeDepartment));
@@ -794,7 +797,7 @@ public class SeedConfiguration {
                 };
 
                 FinancialPlanExpense expense = FinancialPlanExpense.builder()
-                        .planExpenseKey(financialPlanFile1_2.getName() + "_EXPENSE_CODE_" + i)
+                        .planExpenseKey(financialPlanFile1_2.getName() + "_V_" + i)
                         .name("Expense " + projectNameChar)
                         .unitPrice(BigDecimal.valueOf(random.nextInt(5000000) + 1000000))
                         .amount(random.nextInt(10) + 1)

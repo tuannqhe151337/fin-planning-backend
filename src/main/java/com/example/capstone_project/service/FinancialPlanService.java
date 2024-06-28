@@ -1,10 +1,9 @@
 package com.example.capstone_project.service;
 
-import com.example.capstone_project.entity.FinancialPlan;
+import com.example.capstone_project.entity.*;
+import com.example.capstone_project.repository.result.ExpenseResult;
 import com.example.capstone_project.repository.result.PlanDetailResult;
-import com.example.capstone_project.entity.Term;
-import com.example.capstone_project.entity.UserDetail;
-import com.example.capstone_project.entity.PlanStatus;
+import com.example.capstone_project.repository.result.PlanVersionResult;
 
 import java.util.List;
 
@@ -26,4 +25,14 @@ public interface FinancialPlanService {
     PlanDetailResult getPlanDetailByPlanId(Long planId) throws Exception;
 
     int getPlanVersionById(Long planId);
+
+    List<ExpenseResult> getListExpenseByPlanId(Long planId) throws Exception;
+
+    String getLastExpenseCode(Long planId);
+
+    PlanVersionResult getCurrentVersionByPlanId(Long planId);
+
+    void reUploadPlan(FinancialPlan plan);
+
+    FinancialPlanExpense getPlanExpenseReferenceById(Long expenseId);
 }

@@ -5,16 +5,15 @@ import com.example.capstone_project.entity.*;
 import com.example.capstone_project.entity.FinancialPlan;
 import com.example.capstone_project.entity.FinancialPlan_;
 import com.example.capstone_project.entity.UserDetail;
-import com.example.capstone_project.repository.FinancialPlanExpenseRepository;
-import com.example.capstone_project.repository.FinancialPlanRepository;
-import com.example.capstone_project.repository.TermRepository;
-import com.example.capstone_project.repository.PlanStatusRepository;
+import com.example.capstone_project.repository.*;
 import com.example.capstone_project.repository.redis.UserAuthorityRepository;
 import com.example.capstone_project.repository.redis.UserDetailRepository;
+import com.example.capstone_project.repository.result.ExpenseResult;
 import com.example.capstone_project.repository.result.PlanDetailResult;
 import com.example.capstone_project.repository.result.PlanVersionResult;
 import com.example.capstone_project.service.FinancialPlanService;
 import com.example.capstone_project.utils.enums.AuthorityCode;
+import com.example.capstone_project.utils.enums.ExpenseStatusCode;
 import com.example.capstone_project.utils.enums.RoleCode;
 import com.example.capstone_project.utils.exception.ResourceNotFoundException;
 import com.example.capstone_project.utils.helper.PaginationHelper;
@@ -146,7 +145,7 @@ public class FinancialPlanServiceImpl implements FinancialPlanService {
         // Check authorization
         // Check any plan of user department is existing in this term
         if (userAuthorityRepository.get(userId).contains(AuthorityCode.IMPORT_PLAN.getValue()) &&
-              !termRepository.existsPlanOfDepartmentInTerm(userDetail.getDepartmentId(), plan.getTerm().getId()) &&
+                !termRepository.existsPlanOfDepartmentInTerm(userDetail.getDepartmentId(), plan.getTerm().getId()) &&
                 LocalDateTime.now().isBefore(term.getPlanDueDate())) {
             return planRepository.save(plan);
         } else {
@@ -211,5 +210,49 @@ public class FinancialPlanServiceImpl implements FinancialPlanService {
     @Override
     public int getPlanVersionById(Long planId) {
         return planRepository.getPlanVersionByPlanId(planId);
+    }
+
+    @Override
+    public List<ExpenseResult> getListExpenseByPlanId(Long planId) throws Exception {
+
+        // Get userId from token
+        long userId = UserHelper.getUserId();
+
+        // Get user detail
+        UserDetail userDetail = userDetailRepository.get(userId);
+
+        // Check authorization
+        // Check any plan of user department is existing in this term
+        if (userAuthorityRepository.get(userId).contains(AuthorityCode.RE_UPLOAD_PLAN.getValue())) {
+            long departmentId = planRepository.getDepartmentIdByPlanId(planId);
+            // Check department
+            if (departmentId == userDetail.getDepartmentId()) {
+
+                return expenseRepository.getListExpenseByPlanId(planId);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String getLastExpenseCode(Long planId) {
+        return expenseRepository.getLastExpenseCode(planId);
+    }
+
+    @Override
+    public PlanVersionResult getCurrentVersionByPlanId(Long planId) {
+        return planRepository.getCurrentVersionByPlanId(planId);
+    }
+
+    @Override
+    @Transactional
+    public void reUploadPlan(FinancialPlan plan) {
+        planRepository.save(plan);
+    }
+
+    @Override
+    public FinancialPlanExpense getPlanExpenseReferenceById(Long expenseId) {
+        return expenseRepository.getReferenceById(expenseId);
     }
 }
