@@ -33,16 +33,8 @@ public class FinancialReport {
     private Term term;
 
     @OneToMany(mappedBy = FinancialReportExpense_.FINANCIAL_REPORT)
-    private List<FinancialReportExpense> financialReportExpenses;
-
-    @Column(name = "created_at")
-    @CreationTimestamp
-    private LocalDate createdAt;
-
-    @Column(name = "updated_at")
-    @UpdateTimestamp
-    private LocalDate updatedAt;
+    private List<FinancialReportExpense> reportExpenses;
 
     @Column(name = "is_delete", columnDefinition = "bit default 0")
-    private Boolean isDelete;
+    private boolean isDelete;
 }
