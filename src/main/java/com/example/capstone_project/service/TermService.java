@@ -1,5 +1,6 @@
 package com.example.capstone_project.service;
 
+import com.example.capstone_project.controller.body.term.update.UpdateTermBody;
 import com.example.capstone_project.entity.Term;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,5 @@ public interface TermService {
     void createTerm(Term term) throws Exception;
 
     Term findTermById(Long id) throws Exception;
+    Term updateTerm(Term term) throws Exception;
 }
