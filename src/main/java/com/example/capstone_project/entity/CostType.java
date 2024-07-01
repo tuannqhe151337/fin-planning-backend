@@ -1,14 +1,9 @@
 package com.example.capstone_project.entity;
 
+import com.example.capstone_project.utils.enums.CostTypeCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -16,8 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
-public class CostType {
+public class CostType extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,24 +21,20 @@ public class CostType {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "code", unique = true)
+    @Enumerated(EnumType.STRING)
+    private CostTypeCode code;
+
     @OneToMany(mappedBy = Report_.COST_TYPE)
     private List<Report> reports;
 
     @OneToMany(mappedBy = FinancialReportExpense_.COST_TYPE)
-    private List<FinancialReportExpense> financialReportExpenses;
+    private List<FinancialReportExpense> reportExpenses;
 
     @OneToMany(mappedBy = FinancialPlanExpense_.COST_TYPE)
-    private List<FinancialPlanExpense> financialPlanExpenses;
+    private List<FinancialPlanExpense> planExpenses;
 
-    @Column(name = "created_at")
-    @CreationTimestamp
-    private LocalDate createdAt;
-
-    @Column(name = "updated_at")
-    @UpdateTimestamp
-    private LocalDate updatedAt;
-
-    @Column(name = "is_delete", columnDefinition = "bit default 0")
-    private Boolean isDelete;
+    @Column(name = "is_delete",columnDefinition = "bit default 0")
+    private boolean isDelete;
 
 }

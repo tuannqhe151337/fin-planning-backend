@@ -1,24 +1,30 @@
 package com.example.capstone_project.service;
 
-
+import com.example.capstone_project.controller.body.user.changePassword.ChangePasswordBody;
+import com.example.capstone_project.controller.body.user.deactive.DeactiveUserBody;
+import com.example.capstone_project.controller.body.user.activate.ActivateUserBody;
+import com.example.capstone_project.controller.body.user.resetPassword.ResetPasswordBody;
+import com.example.capstone_project.controller.body.user.update.UpdateUserBody;
 import com.example.capstone_project.entity.User;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers(
-            String query,
-            Pageable pageable
-    );
+    List<User> getAllUsers(Long roleId, Long departmentId, Long positionId, String query, Pageable pageable);
 
     long countDistinct(String query);
 
-    User createUser(User user);
+    void createUser(User user) throws Exception;
 
-    User getUserById(Long userId);
+    User getUserById(Long userId) throws Exception;
 
-    User updateUser(Long userId, User user);
+    void updateUser(User user) throws Exception;
 
-    void deleteUser(Long userId);
+    void activateUser(ActivateUserBody activateUserBody);
+    void deactivateUser(DeactiveUserBody deactiveUserBody);
+    void changePassword(ChangePasswordBody changePasswordBody);
+    void resetPassword(ResetPasswordBody resetPasswordBody);
+    String otpValidate(String otp) throws Exception;
+    long countDistinct(String query, Long roleId, Long departmentId, Long positionId);
 }
